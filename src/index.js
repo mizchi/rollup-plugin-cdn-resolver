@@ -1,14 +1,12 @@
-// import foo from './foo';
-// import bar from './bar';
-// import lazy from 'lazy';
-// // import React from "https://cdn.jsdelivr.net/npm/react@16.11.0/index.js"
-// import React from "react"
+// Run pure js
+import foo from './foo';
+import bar from './bar';
 
-// console.log("hello", foo, lazy, bar, React);
+console.log("hello", foo, bar);
 
+// Run react
 import React from "react";
-// import ReactDOM from "react-dom";
-// ReactDOM.render(React.createElement("div", {id: "x"}, "hello"), document.querySelector(".main"));
-
 import ReactDOMServer from "react-dom/server";
-ReactDOMServer.renderToString(React.createElement("div", {id: "x"}, "hello"));
+
+const result = ReactDOMServer.renderToString(React.createElement("div", {id: "x"}, "hello"));
+console.log(result);

@@ -11,6 +11,7 @@
     "isomorphic-unfetch": "^3.0.0",
     "rollup": "^1.25.2",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-pluginutils": "^2.8.2",
     "ts-node": "^8.4.1",
