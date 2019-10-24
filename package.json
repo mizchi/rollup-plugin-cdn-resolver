@@ -1,0 +1,22 @@
+{
+  "name": "rollup-playground",
+  "private": true,
+  "author": "mizchi <kotaro.chikuba@plaid.co.jp>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@types/graphlib": "^2.1.5",
+    "@types/semver": "^6.0.2",
+    "@types/validate-npm-package-name": "^3.0.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "rollup": "^1.25.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-pluginutils": "^2.8.2",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.7.0-beta"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
