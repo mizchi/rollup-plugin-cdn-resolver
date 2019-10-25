@@ -6,7 +6,7 @@
   "author": "@mizchi",
   "license": "MIT",
   "scripts": {
-    "prepare": "build",
+    "prepare": "npm run build",
     "build": "tsc"
   },
   "dependencies": {
