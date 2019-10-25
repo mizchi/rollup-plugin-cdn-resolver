@@ -33,7 +33,7 @@
     "rollup-plugin-virtual": "^1.0.1",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.7.0-beta"
+    "typescript": "^3.6.4"
   },
   "peerDependencies": {
     "rollup": "1.*.*"
