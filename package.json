@@ -1,23 +1,44 @@
 {
-  "name": "rollup-playground",
-  "private": true,
-  "author": "mizchi <kotaro.chikuba@plaid.co.jp>",
+  "name": "rollup-plugin-cdn-resolver",
+  "main": "lib/index.js",
+  "version": "0.0.1",
+  "typings": "lib/index.d.ts",
+  "author": "@mizchi",
   "license": "MIT",
-  "devDependencies": {
+  "scripts": {
+    "prepare": "build",
+    "build": "tsc"
+  },
+  "dependencies": {
     "@babel/core": "^7.6.4",
+    "graphlib": "^2.1.7",
+    "hosted-git-info": "^3.0.2",
+    "isomorphic-unfetch": "^3.0.0",
+    "object-hash": "^2.0.0",
+    "rollup-pluginutils": "^2.8.2",
+    "semver": "^6.3.0",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
     "@types/graphlib": "^2.1.5",
+    "@types/jest": "^24.0.19",
+    "@types/object-hash": "^1.3.0",
     "@types/semver": "^6.0.2",
     "@types/validate-npm-package-name": "^3.0.0",
-    "isomorphic-unfetch": "^3.0.0",
+    "jest": "^24.9.0",
     "rollup": "^1.25.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-pluginutils": "^2.8.2",
+    "rollup-plugin-virtual": "^1.0.1",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.0-beta"
   },
-  "workspaces": [
-    "packages/*"
+  "peerDependencies": {
+    "rollup": "1.*.*"
+  },
+  "files": [
+    "lib"
   ]
 }
