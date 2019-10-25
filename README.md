@@ -1,4 +1,4 @@
-# rollup-plguin-cdn-resolver
+# rollup-plugin-cdn-resolver
 
 Run rollup bundler with CDN (jsdelivr/unpkg).
 
@@ -8,9 +8,9 @@ You can run this in browser.
 
 ```bash
 # npm
-npm install rollup-plguin-cdn-resolver -D
+npm install rollup-plugin-cdn-resolver -D
 # yarn
-yarn add rollup-plguin-cdn-resolver --dev
+yarn add rollup-plugin-cdn-resolver --dev
 ```
 
 ## Example
