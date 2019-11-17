@@ -1,5 +1,4 @@
 import npa from "./npa";
-import fetch from "isomorphic-unfetch";
 
 export const cache: { [key: string]: any } = {};
 
