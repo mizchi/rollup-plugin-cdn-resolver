@@ -4,6 +4,12 @@ import hash from "object-hash";
 import { transform } from "@babel/core";
 import resolve from "./version-resolver";
 
+export type CDNCache = {
+  get(k: string): Promise<string>;
+  set(k: string, v: string): Promise<void>;
+  clear(): Promise<void>;
+};
+
 export default function cdnResolverPlugin(options: {
   host?: string;
   pkg: {
@@ -13,9 +19,11 @@ export default function cdnResolverPlugin(options: {
     devDependencies?: any;
     peerDependencies?: any;
   };
+  cache?: CDNCache;
 }) {
   const host = options.host || "https://cdn.jsdelivr.net/npm";
   const pkg = options.pkg;
+  const cache = options.cache || ((new Map() as any) as CDNCache);
 
   return {
     async resolveId(id: string, importer: string) {
@@ -23,11 +31,17 @@ export default function cdnResolverPlugin(options: {
     },
     async load(id: string) {
       if (id.startsWith(host)) {
+        const cached = await cache.get(id);
+        if (cached) {
+          return cached;
+        }
+
         const code = await load(id);
         const out = transform(code, {
           babelrc: false,
           plugins: [rewriteToCdn(id)]
         });
+        await cache.set(id, out.code);
         return out.code;
       }
     }
