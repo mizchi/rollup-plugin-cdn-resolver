@@ -1,4 +1,3 @@
-import fetch from "isomorphic-unfetch";
 import url from "url";
 import hash from "object-hash";
 import { transform } from "@babel/core";
