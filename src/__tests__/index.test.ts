@@ -3,7 +3,6 @@ import commonjs from "rollup-plugin-commonjs";
 import { rollup } from "rollup";
 import virtual from "rollup-plugin-virtual";
 import cdnResolver, { getTypings } from "../";
-import fetch from "isomorphic-unfetch";
 
 // TODO: .json
 const preactCode = `import { h } from "preact";

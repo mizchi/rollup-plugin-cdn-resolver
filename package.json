@@ -1,7 +1,7 @@
 {
   "name": "rollup-plugin-cdn-resolver",
   "main": "lib/index.js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "typings": "lib/index.d.ts",
   "author": "@mizchi",
   "license": "MIT",
