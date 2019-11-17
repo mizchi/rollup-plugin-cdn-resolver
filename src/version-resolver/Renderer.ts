@@ -1,4 +1,4 @@
-import { Registry, cache } from "./Registry";
+import { PackageRegistry, cache } from "./PackageRegistry";
 import { Graph } from "graphlib";
 
 const packageJsonProps = [
@@ -23,7 +23,7 @@ export class Renderer {
   };
   constructor(
     private graph: Graph,
-    private registry: Registry,
+    private registry: PackageRegistry,
     private invalidPeers: any
   ) {}
 

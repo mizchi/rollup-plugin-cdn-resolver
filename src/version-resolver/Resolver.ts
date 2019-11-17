@@ -1,4 +1,4 @@
-import { Registry } from "./Registry";
+import { PackageRegistry } from "./PackageRegistry";
 import semver from "semver";
 import { Graph } from "graphlib";
 import { Renderer } from "./Renderer";
@@ -27,7 +27,7 @@ export class Resolver {
     };
   } = {};
   private queue: Task[] = [];
-  private registry: Registry = new Registry({
+  private registry: PackageRegistry = new PackageRegistry({
     registryUrl: "https://registry.npmjs.cf/"
   });
   private validatePeers: boolean = true;

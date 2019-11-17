@@ -2,7 +2,7 @@ import fetch from "isomorphic-unfetch";
 import url from "url";
 import hash from "object-hash";
 import { transform } from "@babel/core";
-import resolve from "./version-resolver";
+import resolvePkgsVersions from "./version-resolver";
 
 export type CDNCache = {
   get(k: string): Promise<string>;
@@ -39,7 +39,7 @@ export default function cdnResolverPlugin(options: {
         const code = await load(id);
         const out = transform(code, {
           babelrc: false,
-          plugins: [rewriteToCdn(id)]
+          plugins: [rewriteImportPathToCdn(id)]
         });
         await cache.set(id, out.code);
         return out.code;
@@ -49,7 +49,7 @@ export default function cdnResolverPlugin(options: {
 }
 
 // babel plugin
-function rewriteToCdn(id: string) {
+export function rewriteImportPathToCdn(id: string) {
   return {
     visitor: {
       CallExpression(path) {
@@ -69,15 +69,9 @@ function rewriteToCdn(id: string) {
 }
 
 // File loader with cache
-const __file_cache: { [key: string]: string } = {};
 async function load(id: string) {
-  if (__file_cache[id]) {
-    return __file_cache[id];
-  }
-  // TODO: handle json on fail js
   const res = await fetch(id);
   const code = await res.text();
-  __file_cache[id] = code;
   return code;
 }
 
@@ -95,8 +89,9 @@ async function resolveUrl(
 ) {
   const cacheKey = hash(pkg);
   let resolvedPkg = __pkgResolveCache[cacheKey];
+
   if (resolvedPkg == null) {
-    __pkgResolveCache[cacheKey] = await resolve(pkg);
+    __pkgResolveCache[cacheKey] = await resolvePkgsVersions(pkg);
     resolvedPkg = __pkgResolveCache[cacheKey];
   }
 
@@ -126,4 +121,35 @@ async function resolveUrl(
   if (id.startsWith(host)) {
     return id;
   }
+}
+
+// TODO: Resolve relative files
+export async function getTypings(pkg: any) {
+  const cacheKey = hash(pkg);
+  let resolvedPkg = __pkgResolveCache[cacheKey];
+
+  if (resolvedPkg == null) {
+    __pkgResolveCache[cacheKey] = await resolvePkgsVersions(pkg);
+    resolvedPkg = __pkgResolveCache[cacheKey];
+  }
+
+  const ret = {};
+  await Promise.all(
+    Object.entries(resolvedPkg.appDependencies).map(
+      async ([name, pkg]: any) => {
+        if (pkg.types == null) {
+          return;
+        }
+        const host = "https://cdn.jsdelivr.net/npm";
+        const cdnPath = `${host}/${name}@${pkg.version}/${pkg.types}`;
+        const res = await fetch(cdnPath);
+        const dtsText = await res.text();
+        ret[name] = {
+          path: cdnPath,
+          code: dtsText
+        };
+      }
+    )
+  );
+  return ret;
 }

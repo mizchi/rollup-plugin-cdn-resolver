@@ -3,7 +3,7 @@ import fetch from "isomorphic-unfetch";
 
 export const cache: { [key: string]: any } = {};
 
-export class Registry {
+export class PackageRegistry {
   registryUrl: string;
 
   constructor(options: { registryUrl?: string } = {}) {

@@ -2,7 +2,8 @@ import builtins from "rollup-plugin-node-builtins";
 import commonjs from "rollup-plugin-commonjs";
 import { rollup } from "rollup";
 import virtual from "rollup-plugin-virtual";
-import cdnResolver from "../";
+import cdnResolver, { getTypings } from "../";
+import fetch from "isomorphic-unfetch";
 
 // TODO: .json
 const preactCode = `import { h } from "preact";
@@ -70,5 +71,39 @@ it("bulid react/react-dom", async () => {
   });
   const code = gen.output[0].code;
   eval(code);
+  // console.log(gen.output[0].code);
+});
+
+it("resolve npm types", async () => {
+  const pkg = {
+    private: true,
+    dependencies: {
+      preact: "10.*.*",
+      "@types/lodash": "4.*"
+    }
+  };
+
+  const _typings = await getTypings(pkg);
+  // console.log(_typings);
+  // console.log(typings);
+
+  // const config = {
+  //   input: "index.js",
+  //   plugins: [
+  //     virtual({
+  //       "index.js": reactCode
+  //     }),
+  //     cdnResolver({ pkg }),
+  //     commonjs({}),
+  //     builtins()
+  //   ]
+  // };
+
+  // const bundle = await rollup(config as any);
+  // const gen = await bundle.generate({
+  //   format: "umd"
+  // });
+  // const code = gen.output[0].code;
+  // eval(code);
   // console.log(gen.output[0].code);
 });
