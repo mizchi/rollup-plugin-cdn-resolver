@@ -3,6 +3,8 @@ import hash from "object-hash";
 import { transform } from "@babel/core";
 import resolvePkgsVersions from "./version-resolver";
 
+const DEBUG = false;
+
 export type CDNCache = {
   get(k: string): Promise<string>;
   set(k: string, v: string): Promise<void>;
@@ -67,14 +69,44 @@ export function rewriteImportPathToCdn(id: string) {
   };
 }
 
-// File loader with cache
-async function load(id: string) {
+async function doLoad(id: string) {
   const res = await fetch(id);
   const code = await res.text();
+  if (code.startsWith("Couldn't find the requested")) {
+    throw new Error("missing");
+  }
   return code;
 }
 
+// File loader with cache
+async function load(id: string) {
+  try {
+    return await doLoad(id);
+  } catch (err) {}
+
+  const indexWithDir = id.replace(/.js$/, "/index.js");
+  if (DEBUG) console.log("fallback /index.js", indexWithDir);
+  try {
+    return await doLoad(indexWithDir);
+  } catch (err) {}
+
+  const maybePkgPath = id.replace(/.js$/, "/package.json");
+  if (DEBUG) console.log("fallback to pkg.main", maybePkgPath);
+
+  const pkgText = await doLoad(maybePkgPath);
+  const pkg = JSON.parse(pkgText);
+  if (pkg.main) {
+    const newMain = id.replace(/.js$/, "/" + pkg.main);
+    return await doLoad(newMain);
+  }
+
+  throw new Error("fail to load");
+}
+
 function addJsExt(p: string) {
+  if (p.endsWith(".mjs")) {
+    return p;
+  }
   return p.endsWith(".js") ? p : p + ".js";
 }
 

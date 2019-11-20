@@ -1,11 +1,15 @@
+import "isomorphic-unfetch";
 import builtins from "rollup-plugin-node-builtins";
 import commonjs from "rollup-plugin-commonjs";
 import { rollup } from "rollup";
 import virtual from "rollup-plugin-virtual";
 import cdnResolver, { getTypings } from "../";
 
+jest.setTimeout(1000 * 15);
+
 // TODO: .json
 const preactCode = `import { h } from "preact";
+import { useState } from "preact/hooks";
 console.log(h("div", null, "hello"));
 `;
 
@@ -14,6 +18,62 @@ import ReactDOMServer from "react-dom/server";
 
 const result = ReactDOMServer.renderToString(React.createElement("div", {id: "x"}, "hello"));
 console.log(result);`;
+
+it("build svelte/compiler", async () => {
+  const pkg = {
+    private: true,
+    dependencies: {
+      svelte: "3.12.1"
+    }
+  };
+
+  const config = {
+    input: "index.js",
+    plugins: [
+      virtual({
+        "index.js": `import * as compiler from "svelte/compiler"; console.log("svelte", compiler);`
+      }),
+      cdnResolver({ pkg }),
+      commonjs({}),
+      builtins()
+    ]
+  };
+
+  const bundle = await rollup(config as any);
+  const gen = await bundle.generate({
+    format: "umd"
+  });
+  const code = gen.output[0].code;
+  // console.log("svelte", code);
+  // eval(code);
+});
+
+it("build rollup", async () => {
+  const pkg = {
+    private: true,
+    dependencies: {
+      rollup: "1.27.1"
+    }
+  };
+
+  const config = {
+    input: "index.js",
+    plugins: [
+      virtual({
+        "index.js": `import { rollup } from "rollup/dist/rollup.browser.es.js"; console.log("rollup", rollup);`
+      }),
+      cdnResolver({ pkg }),
+      commonjs({}),
+      builtins()
+    ]
+  };
+
+  const bundle = await rollup(config as any);
+  const gen = await bundle.generate({
+    format: "umd"
+  });
+  const _code = gen.output[0].code;
+});
 
 it("bulid preact", async () => {
   const pkg = {
