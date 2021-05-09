@@ -12,7 +12,7 @@
   "dependencies": {
     "@babel/core": "^7.6.4",
     "graphlib": "^2.1.7",
-    "hosted-git-info": "^3.0.2",
+    "hosted-git-info": "^3.0.8",
     "isomorphic-unfetch": "^3.0.0",
     "object-hash": "^2.0.0",
     "rollup-pluginutils": "^2.8.2",
